@@ -80,7 +80,7 @@ Al menos se implementarán en la clase `Set` las siguientes operaciones sobre co
 * [Complemento relativo](https://en.wikipedia.org/wiki/Complement_(set_theory)#Relative_complement) (`-`)
 * [Intersección](https://en.wikipedia.org/wiki/Intersection_(set_theory)) (`*`)
 * [Complementación](https://en.wikipedia.org/wiki/Complement_(set_theory)) (`!`)
-* Asignación (`=`)
+* [Asignación](https://en.wikipedia.org/wiki/Assignment_operator_(C%2B%2B)) (`=`)
 
 A la hora de calcular el complementario de un conjunto, se considerará que el [conjunto universal](https://en.wikipedia.org/wiki/Universe_(mathematics))
 es aquél que contiene el máximo número de elementos posible en función de su representación interna.
