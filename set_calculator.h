@@ -10,7 +10,7 @@ class Set {
   public:
 
     Set(void);
-    Set(const ulong);
+    Set(const ulong); 
 
     ~Set();
 
@@ -18,23 +18,26 @@ class Set {
     ulong get_long_size_(void) const;
     ulong get_limit_elements_size_(void) const;
 
-    void set_set(std::vector<ulong>);
+    void set_set(const std::vector<ulong>);
     void set_limit_elements_size_(const ulong);
 
     void InsertElement(const ulong);
     void DeleteElement(const ulong);
-    void SetClear(void);
+    void ClearSet(void);
     bool SetIsEmpty(void);
-    bool ElementBelongsToSet(ulong);
+    bool ElementBelongsToSet(const ulong);
     
-    Set& operator=(std::initializer_list<ulong>);
-    bool operator==(const Set&) const;
-    
+    void operator=(const Set);
+    bool operator==(Set);
+    Set operator+(Set);
+    Set& operator-(Set&);
+    Set& operator*(Set&);
+    Set& operator!(void);
 
     void Write(void);
 
   private: 
-    void CheckElement(ulong);
+    void CheckElement(const ulong) const;
 };
 
 // ! set universal, sizeof(long)

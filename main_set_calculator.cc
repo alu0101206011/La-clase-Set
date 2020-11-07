@@ -12,7 +12,7 @@
 /// To compile: make 
 /// To clean files: make clean
 
-#include <iostream>
+#include <iostream> 
 #include <fstream>
 #include <vector>
 
@@ -86,36 +86,49 @@ int main(int argc, char *argv[]) {
     }
   }
  
-  Set set1; 
-  set1.InsertElement(1); 
-  set1.InsertElement(2); 
-  set1.Write(); 
+  Set set1(40); 
+  //set1.InsertElement(1); 
+  set1.InsertElement(39); 
+  set1.InsertElement(4); 
+  set1.InsertElement(27);
+  //set1.InsertElement(63);
+  //set1.InsertElement(399);
+  //set1.InsertElement(299);
+  set1.Write();
   set1.DeleteElement(2); 
   set1.Write(); 
-  if (set1.ElementBelongsToSet(1)) { 
-    std::cout << "The element '" << 1 << "' belongs to the set.\n";
+  if (set1.ElementBelongsToSet(0)) { 
+    std::cout << "The element '" << 0 << "' belongs to the set.\n";
   } else {
-    std::cout << "The element '" << 1 << "' does not belong to the set.\n";
+    std::cout << "The element '" << 0 << "' does not belong to the set.\n";
   }
-  set1.SetClear();
+  //set1.ClearSet();
   if (set1.SetIsEmpty()) {
     std::cout << "Yes está empty\n";
   } else {
     std::cout << "Nope, no está empty\n";
   }
   
-  Set set2(240);
-  set2 = {1, 80, 90, 32, 129, 127, 128, 239};
+  Set set2(70);
+  //set2.InsertElement(172);
+  //set2.InsertElement(1);
+  set2.InsertElement(27);
+  set2.InsertElement(32);
+  //set2.InsertElement(100);
+  //set2.InsertElement(399);
   set2.Write();
-  if (set2.SetIsEmpty()) {
-    std::cout << "Yes está empty\n";
+  set2.InsertElement(4);
+  if (set2.ElementBelongsToSet(0)) {
+    std::cout << "The element '" << 0 << "' belongs to the set.\n";
   } else {
-    std::cout << "Nope, no está empty\n";
+    std::cout << "The element '" << 0 << "' does not belong to the set.\n";
   }
-  if (set2.ElementBelongsToSet(32)) {
-    std::cout << "The element '" << 32 << "' belongs to the set.\n";
+  set1.Write();
+  set2.Write();
+  if (set2 == set1) {
+    std::cout << "jaja Son iguales\n";
   } else {
-    std::cout << "The element '" << 32 << "' does not belong to the set.\n";
+    std::cout << "jaja Diferentes\n";
   }
 
   return 0;
