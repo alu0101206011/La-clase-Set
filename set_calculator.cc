@@ -67,17 +67,17 @@ void Set::DeleteElement(const ulong kElement) {
 
 // Change the positions of the long vector that were at 1 to 0
 void Set::ClearSet(void) {
-  for (ulong i = 0; i < set_.size(); i++)
-    for (ulong j = 0; j < long_size_; j++)
-      if (set_[i] & (ulong)1 << j)
-        set_[i] &= ~((ulong)1 << (j % long_size_));
+  for (ulong iterator = 0; iterator < set_.size(); iterator++)
+    for (ulong pos_long = 0; pos_long < long_size_; pos_long++)
+      if (set_[iterator] & (ulong)1 << pos_long)
+        set_[iterator] &= ~((ulong)1 << (pos_long % long_size_));
 }
 
 // Returns true if the long vector is empty
 bool Set::SetIsEmpty(void) {
-  for (ulong i = 0; i < set_.size(); i++)
-    for (ulong j = 0; j < long_size_; j++) 
-      if (set_[i] & (ulong)1 << j) 
+  for (ulong iterator = 0; iterator < set_.size(); iterator++)
+    for (ulong pos_long = 0; pos_long < long_size_; pos_long++) 
+      if (set_[iterator] & (ulong)1 << pos_long) 
         return false;
   return true;
 }
@@ -105,7 +105,8 @@ bool Set::operator==(Set kOtherSet) {
   ulong counter;
   if (kOtherSet.limit_elements_size_ > limit_elements_size_) {
     for (counter = 0; counter < limit_elements_size_; counter++) {
-      if (ElementBelongsToSet(counter) ^ kOtherSet.ElementBelongsToSet(counter))
+      if (ElementBelongsToSet(counter) ^ 
+          kOtherSet.ElementBelongsToSet(counter))
         return false;
     }
     while (counter != kOtherSet.get_limit_elements_size_()) {
@@ -114,8 +115,10 @@ bool Set::operator==(Set kOtherSet) {
       counter++;
     }
   } else {
-    for (counter = 0; counter < kOtherSet.get_limit_elements_size_(); counter++) 
-      if (ElementBelongsToSet(counter) ^ kOtherSet.ElementBelongsToSet(counter))
+    for (counter = 0; counter < kOtherSet.get_limit_elements_size_(); 
+         counter++)
+      if (ElementBelongsToSet(counter) ^ 
+          kOtherSet.ElementBelongsToSet(counter))
         return false;
     while (counter != get_limit_elements_size_()) {
       if (ElementBelongsToSet(counter)) 
@@ -124,21 +127,76 @@ bool Set::operator==(Set kOtherSet) {
     }
   }
   return true;
-
 }
 
 // 
 Set Set::operator+(Set kOtherSet) {
-  Set Result(limit_elements_size_ + kOtherSet.limit_elements_size_);
-  
+  Set result(limit_elements_size_ + kOtherSet.get_limit_elements_size_());
+  ulong max_size = set_.size();
+  if (set_.size() < kOtherSet.get_set().size())
+    max_size = kOtherSet.get_set().size();
+  for (ulong iterator = 0; iterator < max_size; iterator++)
+    for (ulong pos_long = 0; pos_long < long_size_; pos_long++) {
+      if (iterator < set_.size())
+        if (set_[iterator] & (ulong)1 << pos_long)
+          if (!result.ElementBelongsToSet(pos_long + (iterator * long_size_)))
+            result.InsertElement(pos_long + (iterator * long_size_));
+      if (iterator < kOtherSet.get_set().size())
+        if (kOtherSet.get_set()[iterator] & (ulong)1 << pos_long)
+          if (!result.ElementBelongsToSet(pos_long + (iterator * long_size_))) 
+            result.InsertElement(pos_long + (iterator * long_size_));
+    }
+    return result;
 } 
+
+//operator- si A > B problemas al comparar
+//
+Set Set::operator-(Set kOtherSet) {
+  Set result = (*this);
+  if(limit_elements_size_ < kOtherSet.get_limit_elements_size_()) {
+    for (ulong iterator = 0; iterator < set_.size(); iterator++) 
+      for (ulong pos_long = 0; pos_long < long_size_; pos_long++)
+        if (set_[iterator] & (ulong)1 << pos_long)
+          if (kOtherSet.ElementBelongsToSet(pos_long + (iterator * long_size_)))
+            result.DeleteElement(pos_long + (iterator * long_size_));
+  } else {
+    for (ulong iterator = 0; iterator < kOtherSet.get_set().size(); iterator++) 
+      for (ulong pos_long = 0; pos_long < long_size_; pos_long++)
+        if (set_[iterator] & (ulong)1 << pos_long)
+          if (kOtherSet.ElementBelongsToSet(pos_long + (iterator * long_size_)))
+            result.DeleteElement(pos_long + (iterator * long_size_));    
+  }
+  return result;
+}
+
+//
+Set Set::operator*(Set kOtherSet) {
+  Set result(limit_elements_size_);
+  for (ulong iterator = 0; iterator < set_.size(); iterator++)
+    for (ulong pos_long = 0; pos_long < long_size_; pos_long++)
+      if (set_[iterator] & (ulong)1 << pos_long)
+        if (kOtherSet.ElementBelongsToSet(pos_long + (iterator * long_size_)))
+        result.InsertElement(pos_long + (iterator * long_size_));
+  return result;
+}
+
+//
+Set Set::operator!(void) {
+  Set result(limit_elements_size_);
+  for (ulong iterator = 0; iterator < set_.size(); iterator++) 
+    for (ulong pos_long = 0; pos_long < long_size_; pos_long++)
+      if (!(set_[iterator] & (ulong)1 << pos_long))
+        if (pos_long + (iterator * long_size_) < limit_elements_size_)
+          result.InsertElement(pos_long + (iterator * long_size_));
+  return result; 
+}
 
 // Write the elements of the set
 void Set::Write(void) {
-  for (ulong i = 0; i < set_.size(); i++)
-    for (ulong j = 0; j < long_size_; j++)
-      if (set_[i] & (ulong)1 << j)  // true si el numero 1 de set igual a j
-        std::cout << j + (i * long_size_) << " ";
+  for (ulong iterator = 0; iterator < set_.size(); iterator++)
+    for (ulong pos_long = 0; pos_long < long_size_; pos_long++)
+      if (set_[iterator] & (ulong)1 << pos_long)  // true si el numero 1 de set igual a pos_long
+        std::cout << pos_long + (iterator * long_size_) << " ";
   std::cout << "\n";
 }
 

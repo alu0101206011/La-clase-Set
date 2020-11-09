@@ -30,9 +30,9 @@ class Set {
     void operator=(const Set);
     bool operator==(Set);
     Set operator+(Set);
-    Set& operator-(Set&);
-    Set& operator*(Set&);
-    Set& operator!(void);
+    Set operator-(Set);
+    Set operator*(Set);
+    Set operator!(void);
 
     void Write(void);
 

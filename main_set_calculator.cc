@@ -130,6 +130,14 @@ int main(int argc, char *argv[]) {
   } else {
     std::cout << "jaja Diferentes\n";
   }
+  Set A, B, C;
+  B.InsertElement(1);
+  B.InsertElement(2);
+  C.InsertElement(7);
+  A = B + C;
+  A.Write();
+  A = !A;
+  A.Write();
 
   return 0;
 }
